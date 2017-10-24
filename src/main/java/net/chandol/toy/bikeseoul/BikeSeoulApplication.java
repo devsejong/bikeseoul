@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BikeseoulApplication {
+public class BikeSeoulApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BikeseoulApplication.class, args);
+		SpringApplication.run(BikeSeoulApplication.class, args);
 	}
 }
