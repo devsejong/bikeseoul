@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>net.chandol.toy</groupId>
-	<artifactId>bike-seoul</artifactId>
+	<artifactId>seoul-bike</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>bike-seoul</name>
+	<name>seoul-bike</name>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -58,6 +58,9 @@
 	</dependencies>
 
 	<build>
+
+        <finalName>seoul-bike</finalName>
+
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

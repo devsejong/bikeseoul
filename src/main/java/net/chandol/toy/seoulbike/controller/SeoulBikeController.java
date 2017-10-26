@@ -1,4 +1,4 @@
-package net.chandol.toy.bikeseoul.controller;
+package net.chandol.toy.seoulbike.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @RestController
-public class BikeSeoulController {
+public class SeoulBikeController {
     private static final String BIKE_STATUS = "BIKE_STATUS";
 
     @Autowired

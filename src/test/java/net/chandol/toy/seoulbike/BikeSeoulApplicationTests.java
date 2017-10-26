@@ -1,4 +1,4 @@
-package net.chandol.toy.bikeseoul;
+package net.chandol.toy.seoulbike;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,4 +1,4 @@
-package net.chandol.toy.bikeseoul.config;
+package net.chandol.toy.seoulbike.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
