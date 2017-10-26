@@ -16,7 +16,7 @@
         border-radius: 5px;
     }
 
-    .custom_current_position_control {
+    .map_current_position_control {
         position: absolute;
         top: 10px;
         right: 10px;
@@ -27,7 +27,7 @@
         background-color: #f5f5f5;
     }
 
-    .custom_current_position_control span {
+    .map_current_position_control span {
         display: block;
         width: 36px;
         height: 40px;
@@ -35,15 +35,11 @@
         cursor: pointer;
     }
 
-    .custom_current_position_control span img {
-        width: 15px;
-        height: 15px;
-        padding: 12px 0;
+    .map_current_position_control span img {
+        width: 20px;
+        height: 20px;
+        padding: 8px 0;
         border: none;
-    }
-
-    .custom_current_position_control span:first-child {
-        border-bottom: 1px solid #bfbfbf;
     }
 </style>
 <body>
@@ -52,8 +48,10 @@
 <div id="map" style="width:100%;height:100%;"></div>
 
 <!-- 지도 확대, 축소 컨트롤 div 입니다 -->
-<div class="custom_current_position_control radius_border">
-    <span onclick="currentPosition()"><img src="http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png" alt="확대"></span>
+<div class="map_current_position_control radius_border">
+    <span>
+        <img src="http://t1.daumcdn.net/localimg/localimages/07/2014/img/ico_position.gif" alt="현재위치">
+    </span>
 </div>
 
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f07310d532b9a4759e19a3d2b4749c82"></script>
@@ -62,10 +60,12 @@
     var mapUtil = (function () {
         var self = this;
 
+        var _seoulLatLng = new daum.maps.LatLng(37.566535, 126.977969);
+
         self.createMap = function () {
             var mapContainer = document.getElementById('map'), // 지도를 표시할 div
                 mapOption = {
-                    center: new daum.maps.LatLng(37.566535, 126.977969), // 지도의 중심좌표
+                    center: _seoulLatLng, // 지도의 중심좌표
                     level: 3 // 지도의 확대 레벨
                 };
 
@@ -75,6 +75,8 @@
         };
 
         self.createMarker = function (map, positions) {
+
+
             for (var i = 0; i < positions.length; i++) {
                 // 마커를 생성합니다
                 var marker = new daum.maps.Marker({
@@ -84,28 +86,46 @@
 
                 // 마커에 표시할 인포윈도우를 생성합니다
                 var infowindow = new daum.maps.InfoWindow({
-                    content: positions[i].content // 인포윈도우에 표시할 내용
+                    content: positions[i].content, // 인포윈도우에 표시할 내용
+                    removable : true
                 });
 
                 // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
                 // 이벤트 리스너로는 클로저를 만들어 등록합니다
                 // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
-                daum.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
-                daum.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+                daum.maps.event.addListener(marker, 'click', makeClickListener(map, marker, infowindow));
             }
 
-            // 인포윈도우를 표시하는 클로저를 만드는 함수입니다
-            function makeOverListener(map, marker, infowindow) {
-                return function () {
+            function makeClickListener(map, marker, infowindow) {
+                return function() {
                     infowindow.open(map, marker);
                 };
             }
+        };
 
-            // 인포윈도우를 닫는 클로저를 만드는 함수입니다
-            function makeOutListener(infowindow) {
-                return function () {
-                    infowindow.close();
-                };
+        self.moveToCurrentPosition = function (map) {
+            _getCurrentPosition(function (position) {
+                map.panTo(position);
+            });
+        };
+
+        var _getCurrentPosition = function (callback) {
+            // HTML5의 geolocation으로 사용할 수 있는지 확인합니다
+            if (navigator.geolocation) {
+                // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var lat = position.coords.latitude, // 위도
+                        lon = position.coords.longitude; // 경도
+
+                    var locPosition = new daum.maps.LatLng(lat, lon); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
+
+                    callback(locPosition);
+                });
+            }
+            // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
+            else {
+                console.log("geoLocation을 사용할 수 없습니다.");
+                callback(_seoulLatLng);
             }
         };
 
@@ -137,7 +157,7 @@
                     };
 
                     positions.push({
-                        content: '<div>' + position.name + '<br>' + position.bikeCount + '/' + position.rackCount + '</div>',
+                        content: '<div style="padding:5px;">' + position.name + '<br>' + position.bikeCount + '/' + position.rackCount + '</div>',
                         latlng: new daum.maps.LatLng(position.latitude, position.longitude)
                     });
                 }
@@ -151,30 +171,16 @@
         return self;
     })();
 
-    var geoUtil = (function(){
-        // GeoLocation을 이용해서 접속 위치를 얻어옵니다
-        navigator.geolocation.getCurrentPosition(function(position) {
-
-            var lat = position.coords.latitude, // 위도
-                lon = position.coords.longitude; // 경도
-
-            var locPosition = new daum.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
-                message = '<div style="padding:5px;">여기에 계신가요?!</div>'; // 인포윈도우에 표시될 내용입니다
-
-            // 마커와 인포윈도우를 표시합니다
-            displayMarker(locPosition, message);
-
-        });
-
-    })();
-
-
     (function () {
 
 
         var map = mapUtil.createMap();
         seoulBikeUtil.getStationStatus(function (positions) {
             mapUtil.createMarker(map, positions);
+        });
+
+        $(".map_current_position_control").on("click", function () {
+            mapUtil.moveToCurrentPosition(map);
         });
 
     })();
