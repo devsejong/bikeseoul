@@ -2,53 +2,17 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>내 주변 따릉이 찾기</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=0,maximum-scale=10,user-scalable=no">
+    <title>내 주변 따릉이</title>
+    <link rel="stylesheet" href="/asset/css/seoulbike.css">
 </head>
-<style type="text/css">
-    html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
-
-    .radius_border {
-        border: 1px solid #919191;
-        border-radius: 5px;
-    }
-
-    .map_current_position_control {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        width: 4rem;
-        height: 4rem;
-        overflow: hidden;
-        z-index: 1;
-        background-color: #f5f5f5;
-    }
-
-    .map_current_position_control span {
-        display: block;
-        width: 100%;
-        height: 100%;
-        text-align: center;
-        cursor: pointer;
-    }
-
-    .map_current_position_control span img {
-        width: 70%;
-        height: 70%;
-        padding: 15% 0;
-        border: none;
-    }
-</style>
 <body>
 
 <!-- 지도를 표시할 div 입니다 -->
-<div id="map" style="width:100%;height:100%;"></div>
+<div id="map"></div>
 
 <!-- 지도 확대, 축소 컨트롤 div 입니다 -->
-<div class="map_current_position_control radius_border">
+<div class="map_current_position_control">
     <span>
         <img src="//t1.daumcdn.net/localimg/localimages/07/2014/img/ico_position.gif" alt="현재위치">
     </span>
