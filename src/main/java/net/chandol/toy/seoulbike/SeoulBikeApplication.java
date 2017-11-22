@@ -9,4 +9,5 @@ public class SeoulBikeApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SeoulBikeApplication.class, args);
 	}
+
 }
